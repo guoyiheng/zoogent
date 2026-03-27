@@ -18,9 +18,7 @@
 - [ ] 自定义 skill
 - [ ] Game mode：角色可以在屏幕上进行一些简单的游戏，比如捉迷藏、跳绳等，增加娱乐性。
 
-# zoogent
-
-![zoogent](hero-thumbnail.png)
+![zoogent](hero-thumbnail.jpg)
 
 Tiny AI companions that live on your macOS dock.
 
@@ -53,7 +51,7 @@ zoogent extends and customizes that work for this repository.
 
 - macOS Sonoma (14.0+)
 - At least one supported CLI installed:
-  - [Claude Code](https://claude.ai/download)
+  - [Claude Code](https://claude.ai/download) — `curl -fsSL https://claude.ai/install.sh | sh`
   - [OpenAI Codex](https://github.com/openai/codex) — `npm install -g @openai/codex`
   - [GitHub Copilot](https://github.com/github/copilot-cli) — `brew install copilot-cli`
 
