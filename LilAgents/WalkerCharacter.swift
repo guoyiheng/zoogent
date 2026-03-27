@@ -34,13 +34,31 @@ class WalkerCharacter {
     var goingRight = true
     var walkStartPos: CGFloat = 0.0
     var walkEndPos: CGFloat = 0.0
+    var verticalProgress: CGFloat = 0.0
+    var walkStartVertical: CGFloat = 0.0
+    var walkEndVertical: CGFloat = 0.0
     var currentTravelDistance: CGFloat = 500.0
     // Walk endpoints stored in pixels for consistent speed across screen switches
     var walkStartPixel: CGFloat = 0.0
     var walkEndPixel: CGFloat = 0.0
 
+    // Keep some breathing room from top and bottom edges when roaming.
+    private let verticalRoamRange: ClosedRange<CGFloat> = 0.05...0.92
+
     // Onboarding
     var isOnboarding = false
+
+    // Optional override for display name shown in menus
+    var displayNameOverride: String?
+    var displayName: String {
+        if let o = displayNameOverride { return o }
+        var base = videoName
+        if base.hasPrefix("walk-") { base = String(base.dropFirst(5)) }
+        if let first = base.split(separator: "-").first {
+            return String(first).capitalized
+        }
+        return base
+    }
 
     // Popover state
     var isIdleForPopover = false
@@ -615,24 +633,29 @@ class WalkerCharacter {
         playCount = 0
         walkStartTime = CACurrentMediaTime()
 
-        if positionProgress > 0.85 {
-            goingRight = false
-        } else if positionProgress < 0.15 {
-            goingRight = true
-        } else {
-            goingRight = Bool.random()
-        }
-
         walkStartPos = positionProgress
-        // Walk a fixed pixel distance (~200-325px) regardless of screen width.
-        let referenceWidth: CGFloat = 500.0
-        let walkPixels = CGFloat.random(in: walkAmountRange) * referenceWidth
-        let walkAmount = currentTravelDistance > 0 ? walkPixels / currentTravelDistance : 0.3
-        if goingRight {
-            walkEndPos = min(walkStartPos + walkAmount, 1.0)
-        } else {
-            walkEndPos = max(walkStartPos - walkAmount, 0.0)
+        walkStartVertical = verticalProgress
+
+        // Pick a random target on X axis with a minimum move distance.
+        var nextX = CGFloat.random(in: 0.02...0.98)
+        var tries = 0
+        while abs(nextX - walkStartPos) < 0.08 && tries < 8 {
+            nextX = CGFloat.random(in: 0.02...0.98)
+            tries += 1
         }
+        walkEndPos = nextX
+
+        // Pick a random target on Y axis with a minimum move distance.
+        var nextY = CGFloat.random(in: verticalRoamRange)
+        tries = 0
+        while abs(nextY - walkStartVertical) < 0.06 && tries < 8 {
+            nextY = CGFloat.random(in: verticalRoamRange)
+            tries += 1
+        }
+        walkEndVertical = nextY
+
+        goingRight = walkEndPos >= walkStartPos
+
         // Store pixel positions so walk speed stays consistent if screen changes mid-walk
         walkStartPixel = walkStartPos * currentTravelDistance
         walkEndPixel = walkEndPos * currentTravelDistance
@@ -708,14 +731,22 @@ class WalkerCharacter {
 
     // MARK: - Frame Update
 
-    func update(dockX: CGFloat, dockWidth: CGFloat, dockTopY: CGFloat) {
+    private func frameOrigin(screen: NSScreen, dockX: CGFloat, xTravel: CGFloat) -> NSPoint {
+        let x = dockX + xTravel * positionProgress + currentFlipCompensation
+
+        let minY = screen.visibleFrame.minY + 8 + yOffset
+        let maxY = screen.visibleFrame.maxY - displayHeight - 8 + yOffset
+        let clampedYProgress = min(max(verticalProgress, 0), 1)
+        let y = minY + (maxY - minY) * clampedYProgress
+
+        return NSPoint(x: x, y: y)
+    }
+
+    func update(screen: NSScreen, dockX: CGFloat, dockWidth: CGFloat) {
         currentTravelDistance = max(dockWidth - displayWidth, 0)
         if isIdleForPopover {
             let travelDistance = currentTravelDistance
-            let x = dockX + travelDistance * positionProgress + currentFlipCompensation
-            let bottomPadding = displayHeight * 0.15
-            let y = dockTopY - bottomPadding + yOffset
-            window.setFrameOrigin(NSPoint(x: x, y: y))
+            window.setFrameOrigin(frameOrigin(screen: screen, dockX: dockX, xTravel: travelDistance))
             updatePopoverPosition()
             updateThinkingBubble()
             return
@@ -728,10 +759,7 @@ class WalkerCharacter {
                 startWalk()
             } else {
                 let travelDistance = max(dockWidth - displayWidth, 0)
-                let x = dockX + travelDistance * positionProgress + currentFlipCompensation
-                let bottomPadding = displayHeight * 0.15
-                let y = dockTopY - bottomPadding + yOffset
-                window.setFrameOrigin(NSPoint(x: x, y: y))
+                window.setFrameOrigin(frameOrigin(screen: screen, dockX: dockX, xTravel: travelDistance))
                 return
             }
         }
@@ -749,17 +777,16 @@ class WalkerCharacter {
             if travelDistance > 0 {
                 positionProgress = min(max(currentPixel / travelDistance, 0), 1)
             }
+            verticalProgress = walkStartVertical + (walkEndVertical - walkStartVertical) * walkNorm
 
             if elapsed >= videoDuration {
                 walkEndPos = positionProgress
+                walkEndVertical = verticalProgress
                 enterPause()
                 return
             }
 
-            let x = dockX + travelDistance * positionProgress + currentFlipCompensation
-            let bottomPadding = displayHeight * 0.15
-            let y = dockTopY - bottomPadding + yOffset
-            window.setFrameOrigin(NSPoint(x: x, y: y))
+            window.setFrameOrigin(frameOrigin(screen: screen, dockX: dockX, xTravel: travelDistance))
         }
 
         updateThinkingBubble()

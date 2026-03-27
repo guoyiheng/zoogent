@@ -162,22 +162,11 @@ class LilAgentsController {
     func tick() {
         guard let screen = activeScreen else { return }
 
-        let screenWidth = screen.frame.width
-        let dockX: CGFloat
-        let dockWidth: CGFloat
-        let dockTopY: CGFloat
-
-        if screenHasDock(screen) {
-            // Dock is on this screen — constrain to dock area
-            (dockX, dockWidth) = getDockIconArea(screenWidth: screenWidth)
-            dockTopY = screen.visibleFrame.origin.y
-        } else {
-            // No dock on this screen — use full screen width with small margin
-            let margin: CGFloat = 40.0
-            dockX = screen.frame.origin.x + margin
-            dockWidth = screenWidth - margin * 2
-            dockTopY = screen.frame.origin.y
-        }
+        // Move across the whole visible screen area instead of only the Dock icon strip.
+        let margin: CGFloat = 20.0
+        let dockX = screen.visibleFrame.minX + margin
+        let dockWidth = max(screen.visibleFrame.width - margin * 2, 0)
+        let dockTopY = screen.visibleFrame.minY
 
         updateDebugLine(dockX: dockX, dockWidth: dockWidth, dockTopY: dockTopY)
 
@@ -192,7 +181,7 @@ class LilAgentsController {
             }
         }
         for char in activeChars {
-            char.update(dockX: dockX, dockWidth: dockWidth, dockTopY: dockTopY)
+            char.update(screen: screen, dockX: dockX, dockWidth: dockWidth)
         }
 
         let sorted = activeChars.sorted { $0.positionProgress < $1.positionProgress }

@@ -37,13 +37,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         let menu = NSMenu()
 
-        let char1Item = NSMenuItem(title: "Bruce", action: #selector(toggleChar1), keyEquivalent: "1")
-        char1Item.state = .on
-        menu.addItem(char1Item)
-
-        let char2Item = NSMenuItem(title: "Jazz", action: #selector(toggleChar2), keyEquivalent: "2")
-        char2Item.state = .on
-        menu.addItem(char2Item)
+        // Agents submenu (dynamic from controller.characters)
+        let agentsItem = NSMenuItem(title: "Agents", action: nil, keyEquivalent: "")
+        let agentsMenu = NSMenu()
+        let chars = controller?.characters ?? []
+        for (i, char) in chars.enumerated() {
+            let key = i < 9 ? "\(i+1)" : "" // only 1-9 get shortcut
+            let item = NSMenuItem(title: char.displayName, action: #selector(toggleAgent(_:)), keyEquivalent: key)
+            item.tag = i
+            item.state = (char.window?.isVisible ?? true) ? .on : .off
+            agentsMenu.addItem(item)
+        }
+        agentsItem.submenu = agentsMenu
+        menu.addItem(agentsItem)
 
         menu.addItem(NSMenuItem.separator())
 
@@ -197,6 +203,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @objc func toggleChar2(_ sender: NSMenuItem) {
         guard let chars = controller?.characters, chars.count > 1 else { return }
         let char = chars[1]
+        if char.window.isVisible {
+            char.window.orderOut(nil)
+            char.queuePlayer.pause()
+            sender.state = .off
+        } else {
+            char.window.orderFrontRegardless()
+            sender.state = .on
+        }
+    }
+
+    @objc func toggleAgent(_ sender: NSMenuItem) {
+        let idx = sender.tag
+        guard let chars = controller?.characters, idx >= 0, idx < chars.count else { return }
+        let char = chars[idx]
         if char.window.isVisible {
             char.window.orderOut(nil)
             char.queuePlayer.pause()
