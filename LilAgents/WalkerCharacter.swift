@@ -38,6 +38,7 @@ class WalkerCharacter {
     var walkStartVertical: CGFloat = 0.0
     var walkEndVertical: CGFloat = 0.0
     var currentTravelDistance: CGFloat = 500.0
+    var isDragging = false
     // Walk endpoints stored in pixels for consistent speed across screen switches
     var walkStartPixel: CGFloat = 0.0
     var walkEndPixel: CGFloat = 0.0
@@ -731,6 +732,55 @@ class WalkerCharacter {
 
     // MARK: - Frame Update
 
+    func beginDrag() {
+        isDragging = true
+        isWalking = false
+        isPaused = true
+        queuePlayer.pause()
+        queuePlayer.seek(to: .zero)
+    }
+
+    func drag(to targetOrigin: NSPoint) {
+        guard let screen = window.screen ?? controller?.activeScreen else { return }
+
+        let visible = screen.visibleFrame
+        let minX = visible.minX
+        let maxX = visible.maxX - displayWidth
+        let minY = visible.minY + 8 + yOffset
+        let maxY = visible.maxY - displayHeight - 8 + yOffset
+
+        let clampedX = min(max(targetOrigin.x, minX), maxX)
+        let clampedY = min(max(targetOrigin.y, minY), maxY)
+        window.setFrameOrigin(NSPoint(x: clampedX, y: clampedY))
+
+        let margin: CGFloat = 20.0
+        let dockX = visible.minX + margin
+        let dockWidth = max(visible.width - margin * 2, 0)
+        let travelDistance = max(dockWidth - displayWidth, 0)
+        let baseX = clampedX - currentFlipCompensation
+
+        if travelDistance > 0 {
+            positionProgress = min(max((baseX - dockX) / travelDistance, 0), 1)
+        }
+        if maxY > minY {
+            verticalProgress = min(max((clampedY - minY) / (maxY - minY), 0), 1)
+        }
+
+        walkStartPos = positionProgress
+        walkEndPos = positionProgress
+        walkStartVertical = verticalProgress
+        walkEndVertical = verticalProgress
+
+        if isIdleForPopover {
+            updatePopoverPosition()
+        }
+    }
+
+    func endDrag() {
+        isDragging = false
+        pauseEndTime = CACurrentMediaTime() + Double.random(in: 2.0...5.0)
+    }
+
     private func frameOrigin(screen: NSScreen, dockX: CGFloat, xTravel: CGFloat) -> NSPoint {
         let x = dockX + xTravel * positionProgress + currentFlipCompensation
 
@@ -744,6 +794,12 @@ class WalkerCharacter {
 
     func update(screen: NSScreen, dockX: CGFloat, dockWidth: CGFloat) {
         currentTravelDistance = max(dockWidth - displayWidth, 0)
+
+        if isDragging {
+            updateThinkingBubble()
+            return
+        }
+
         if isIdleForPopover {
             let travelDistance = currentTravelDistance
             window.setFrameOrigin(frameOrigin(screen: screen, dockX: dockX, xTravel: travelDistance))
