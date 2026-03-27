@@ -15,17 +15,17 @@
             6. Commit appcast.xml and push
         -->
         <item>
-            <title>v1.0</title>
-            <description>First release of zoogent.</description>
-            <pubDate>Sun, 22 Mar 2026 23:35:00 -0700</pubDate>
+            <title>v0.1</title>
+            <description>Initial release of zoogent.</description>
+            <pubDate>Thu, 27 Mar 2026 00:00:00 -0700</pubDate>
             <sparkle:version>1</sparkle:version>
-            <sparkle:shortVersionString>1.0</sparkle:shortVersionString>
+            <sparkle:shortVersionString>0.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <enclosure
-                url="https://github.com/guoyiheng/zoogent/releases/download/v1.0/zoogent-v1.0.zip"
+                url="https://github.com/guoyiheng/zoogent/releases/download/v0.1/zoogent-v0.1.zip"
                 type="application/octet-stream"
-                sparkle:edSignature="Cc5qFPqcDKUBaW2YtJucY5EupoBrYZ5JFvTGR/5QwYLEejO0IQerIlMMaL//pi7ZuBHUoQRw4RLVtXaR+vlVCw=="
-                length="20255742"
+                sparkle:edSignature="lM89szOPYG7PcNyvg9Jxn5qip7a01jzVvC1Y2+3CMApYMYzn+NuUpze2hKq4Ev1nfOry9Um+lIgQWsEFiG7QCA=="
+                length="20170057"
             />
         </item>
     </channel>

@@ -253,13 +253,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @objc func showAbout() {
         let shortVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0"
         let buildVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? shortVersion
-        let credits = NSAttributedString(string: "Author: \(authorName)\n\(authorURL)")
+        // let credits = NSAttributedString(string: "Author: \(authorName)\n\(authorURL)")
 
         NSApp.orderFrontStandardAboutPanel(options: [
             .applicationName: appName,
             .applicationVersion: shortVersion,
             .version: buildVersion,
-            .credits: credits
+            // .credits: credits
         ])
         NSApp.activate(ignoringOtherApps: true)
     }

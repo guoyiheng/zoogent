@@ -15,7 +15,7 @@
     <key>SUFeedURL</key>
     <string>https://raw.githubusercontent.com/guoyiheng/zoogent/main/appcast.xml</string>
     <key>SUPublicEDKey</key>
-    <string>8QOCrY3j4crgz4iR5lmxyv+rA5vnqK6Qtd1XheMllP8=</string>
+    <string>L3l7EX2bja5w/8sXv0SrRpmKZYjvRRcQTLMLP4b9/p0=</string>
     <key>SUEnableAutomaticChecks</key>
     <true/>
     <key>SUAllowsAutomaticUpdates</key>
