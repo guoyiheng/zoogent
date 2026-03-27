@@ -1,6 +1,9 @@
 # zoogent
 
 ## 计划功能
+- [x] 设置角色可在屏幕上二维移动
+- [x] 设置角色可拖拽
+- [ ] 显示的对话窗口根据角色的位置动态调整，确保对话窗口不会被角色遮挡或出现在屏幕边缘
 - [ ] 角色
   - [ ] 增加更多的角色，比如猫、狗、兔子等，增加趣味性。
   - [ ] 增加角色的表情和动作，比如跳出屏幕，移动到屏幕边缘等，增加互动性。
@@ -9,7 +12,6 @@
   - [ ] 角色记忆功能 
   - [ ] 保存对话记录 压缩对话
   - [ ] 自定义角色性格
-- [ ] 设置角色可拖拽
 - [ ] 角色位置可固定
 - [ ] 自定义 api 接口
 - [ ] 自定义 skill
@@ -29,6 +31,11 @@ Supports **Claude Code**, **OpenAI Codex**, and **GitHub Copilot** CLIs — swit
 
 This project is based on the open-source project [lil-agents](https://github.com/ryanstephen/lil-agents).
 zoogent extends and customizes that work for this repository.
+
+## maintainer
+
+- Author: Guo Yiheng
+- GitHub: [@guoyiheng](https://github.com/guoyiheng)
 
 ## features
 

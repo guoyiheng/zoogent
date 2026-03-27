@@ -15,6 +15,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var controller: LilAgentsController?
     var statusItem: NSStatusItem?
     let updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
+    private let appName = "zoogent"
+    private let authorName = "Guo Yiheng"
+    private let authorURL = "https://github.com/guoyiheng"
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory)
@@ -101,6 +104,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         menu.addItem(displayItem)
 
         menu.addItem(NSMenuItem.separator())
+
+        let aboutItem = NSMenuItem(title: "About \(appName)", action: #selector(showAbout), keyEquivalent: "")
+        aboutItem.target = self
+        menu.addItem(aboutItem)
 
         let updateItem = NSMenuItem(title: "Check for Updates…", action: #selector(SPUStandardUpdaterController.checkForUpdates(_:)), keyEquivalent: "")
         updateItem.target = updaterController
@@ -241,6 +248,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @objc func toggleSounds(_ sender: NSMenuItem) {
         WalkerCharacter.soundsEnabled.toggle()
         sender.state = WalkerCharacter.soundsEnabled ? .on : .off
+    }
+
+    @objc func showAbout() {
+        let shortVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0"
+        let buildVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? shortVersion
+        let credits = NSAttributedString(string: "Author: \(authorName)\n\(authorURL)")
+
+        NSApp.orderFrontStandardAboutPanel(options: [
+            .applicationName: appName,
+            .applicationVersion: shortVersion,
+            .version: buildVersion,
+            .credits: credits
+        ])
+        NSApp.activate(ignoringOtherApps: true)
     }
 
     @objc func quitApp() {
