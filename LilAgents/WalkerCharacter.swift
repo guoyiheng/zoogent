@@ -396,18 +396,46 @@ class WalkerCharacter {
 
     func updatePopoverPosition() {
         guard let popover = popoverWindow, isIdleForPopover else { return }
-        guard let screen = NSScreen.main else { return }
+        guard let screen = window.screen ?? controller?.activeScreen ?? NSScreen.main else { return }
 
         let charFrame = window.frame
         let popoverSize = popover.frame.size
-        var x = charFrame.midX - popoverSize.width / 2
-        let y = charFrame.maxY - 15
+        let visible = screen.visibleFrame
+        let edgePadding: CGFloat = 8
+        let gap: CGFloat = 10
 
-        let screenFrame = screen.frame
-        x = max(screenFrame.minX + 4, min(x, screenFrame.maxX - popoverSize.width - 4))
-        let clampedY = min(y, screenFrame.maxY - popoverSize.height - 4)
+        // Horizontal placement: center by default, but bias to left/right anchoring near edges.
+        let leftThreshold = visible.minX + popoverSize.width * 0.55
+        let rightThreshold = visible.maxX - popoverSize.width * 0.55
+        var x: CGFloat
+        if charFrame.midX <= leftThreshold {
+            x = charFrame.minX
+        } else if charFrame.midX >= rightThreshold {
+            x = charFrame.maxX - popoverSize.width
+        } else {
+            x = charFrame.midX - popoverSize.width / 2
+        }
+        x = max(visible.minX + edgePadding, min(x, visible.maxX - popoverSize.width - edgePadding))
 
-        popover.setFrameOrigin(NSPoint(x: x, y: clampedY))
+        // Vertical placement: prefer above character; fallback below; final fallback clamps.
+        let yAbove = charFrame.maxY + gap
+        let yBelow = charFrame.minY - popoverSize.height - gap
+        let fitsAbove = yAbove + popoverSize.height <= visible.maxY - edgePadding
+        let fitsBelow = yBelow >= visible.minY + edgePadding
+
+        let y: CGFloat
+        if fitsAbove {
+            y = yAbove
+        } else if fitsBelow {
+            y = yBelow
+        } else {
+            y = min(
+                max(yAbove, visible.minY + edgePadding),
+                visible.maxY - popoverSize.height - edgePadding
+            )
+        }
+
+        popover.setFrameOrigin(NSPoint(x: x, y: y))
     }
 
     // MARK: - Thinking Bubble

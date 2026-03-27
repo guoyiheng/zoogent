@@ -1,0 +1,19 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Build and Run zoogent (macOS)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "/Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild -project zoogent.xcodeproj -scheme LilAgents -configuration Debug -derivedDataPath ./build build && open ./build/Build/Products/Debug/zoogent.app",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Run Existing zoogent.app",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "open ./build/Build/Products/Debug/zoogent.app",
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}
