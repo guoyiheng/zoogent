@@ -21,24 +21,37 @@ class LilAgentsController {
         char2.decelStart = 8.0
         char2.walkStop = 8.75
         char2.walkAmountRange = 0.35...0.6
+
+        let char3 = WalkerCharacter(videoName: "walk-test-01")
+        char3.accelStart = 3.2
+        char3.fullSpeedStart = 4.0
+        char3.decelStart = 8.2
+        char3.walkStop = 8.8
+        char3.walkAmountRange = 0.35...0.6
         char1.yOffset = -3
         char2.yOffset = -7
+        char3.yOffset = -5
         char1.characterColor = NSColor(red: 0.4, green: 0.72, blue: 0.55, alpha: 1.0)
         char2.characterColor = NSColor(red: 1.0, green: 0.4, blue: 0.0, alpha: 1.0)
+        char3.characterColor = NSColor(red: 0.2, green: 0.65, blue: 0.95, alpha: 1.0)
 
         char1.flipXOffset = 0
         char2.flipXOffset = -9
+        char3.flipXOffset = -3
 
         char1.positionProgress = 0.3
         char2.positionProgress = 0.7
+        char3.positionProgress = 0.5
 
         char1.pauseEndTime = CACurrentMediaTime() + Double.random(in: 0.5...2.0)
         char2.pauseEndTime = CACurrentMediaTime() + Double.random(in: 8.0...14.0)
+        char3.pauseEndTime = CACurrentMediaTime() + Double.random(in: 3.0...8.0)
 
         char1.setup()
         char2.setup()
+        char3.setup()
 
-        characters = [char1, char2]
+        characters = [char1, char2, char3]
         characters.forEach { $0.controller = self }
 
         setupDebugLine()
