@@ -27,10 +27,10 @@
 
 /* Begin PBXFileReference section */
 		A10000020000000000000001 /* LilAgentsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LilAgentsApp.swift; sourceTree = "<group>"; };
-		A10000020000000000000002 /* walk-bruce-01.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "walk-bruce-01.mov"; sourceTree = "<group>"; };
+		A10000020000000000000002 /* walk-bruce-01.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "Characters/walk-bruce-01.mov"; sourceTree = "<group>"; };
 		A10000020000000000000003 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A10000020000000000000004 /* LilAgents.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LilAgents.entitlements; sourceTree = "<group>"; };
-		A10000020000000000000005 /* walk-jazz-01.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "walk-jazz-01.mov"; sourceTree = "<group>"; };
+		A10000020000000000000005 /* walk-jazz-01.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "Characters/walk-jazz-01.mov"; sourceTree = "<group>"; };
 		A10000020000000000000007 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A10000020000000000000010 /* Sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Sounds; sourceTree = "<group>"; };
 		A10000020000000000000020 /* PopoverTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverTheme.swift; sourceTree = "<group>"; };
@@ -305,7 +305,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LilAgents/Info.plist;
@@ -317,7 +317,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.2;
+				MARKETING_VERSION = 0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.zoogent.app;
 				PRODUCT_NAME = zoogent;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -333,7 +333,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LilAgents/Info.plist;
@@ -345,7 +345,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.2;
+				MARKETING_VERSION = 0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.zoogent.app;
 				PRODUCT_NAME = zoogent;
 				SWIFT_EMIT_LOC_STRINGS = YES;
